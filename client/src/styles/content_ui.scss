@@ -1,0 +1,158 @@
+// Generally non-functional or non-interactive parts of the UI
+.content-section-g {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+
+	&.screen-centered {
+		margin-top: 15px;
+		margin-bottom: 15px;
+		height: calc(100vh - 120px);
+		max-height: 1000px;
+	}
+}
+
+.content-g {
+	line-height: 1.3;
+	letter-spacing: normal;
+	h1,
+	h2,
+	h3,
+	h4 {
+		margin: 0px;
+		margin-bottom: 10px;
+	}
+	p,
+	ul,
+	ol {
+		margin-top: 0px;
+		// margin-bottom: 30px;
+	}
+	ul,
+	ol {
+		padding-left: 20px;
+		> li {
+			margin-bottom: 2px;
+		}
+	}
+	ol {
+		> li {
+			padding-left: 5px;
+		}
+	}
+	ul {
+		list-style-type: disc;
+	}
+	section {
+		margin-bottom: 20px;
+	}
+}
+
+.label-g {
+	margin: 0px 0px 3px 0px;
+	color: #9e9e9e;
+	font-size: 12px;
+	display: flex;
+	align-items: center;
+	text-transform: uppercase;
+	@include font-normal-g;
+
+	&.small {
+		font-size: 10px;
+		margin-bottom: 3px;
+	}
+	&.small-med {
+		font-size: 12px;
+	}
+	&.large {
+		font-size: 18px;
+	}
+	&.danger {
+		color: $dangerColor;
+	}
+	&.dark {
+		color: $textColor;
+	}
+	&.no-marg {
+		margin: 0px;
+	}
+	&.no-upper {
+		text-transform: none;
+	}
+}
+
+.separator-g {
+	border-bottom: 1px solid #eee;
+	margin-bottom: 15px;
+	margin-top: 15px;
+	&.strong {
+		border-bottom: 3px solid $textColor;
+		margin-top: 30px;
+		margin-bottom: 30px;
+	}
+}
+
+.info-g {
+	background: #eee;
+	border: 1px solid #ddd;
+	padding: 10px 10px;
+	border-radius: 5px;
+	margin-bottom: 10px;
+	h4 {
+		margin-bottom: 5px;
+	}
+	p:first-child,
+	h4 + p {
+		margin-top: 0px;
+	}
+	p:last-child {
+		margin-bottom: 0px;
+	}
+
+	&.warn {
+		background: #efefdf;
+		border: 1px solid #e2e2d0;
+	}
+}
+
+// Loading
+.lds-ring-g {
+	display: inline-block;
+	position: relative;
+	width: 16px;
+	height: 16px;
+}
+.lds-ring-g div {
+	box-sizing: border-box;
+	display: block;
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	margin: 0px;
+	border: 8px solid $mainColor;
+	border-radius: 50%;
+	animation: lds-ring-g 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+	border-color: $mainColor transparent transparent transparent;
+}
+.lds-ring-g div:nth-child(1) {
+	animation-delay: -0.45s;
+}
+.lds-ring-g div:nth-child(2) {
+	animation-delay: -0.3s;
+}
+.lds-ring-g div:nth-child(3) {
+	animation-delay: -0.15s;
+}
+@keyframes lds-ring-g {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}

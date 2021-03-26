@@ -1,0 +1,277 @@
+// Functional UI
+.input-g {
+	margin-bottom: 15px;
+	letter-spacing: 1px;
+	font-size: 16px;
+	padding: 10px;
+	min-width: 0;
+	max-width: calc(100% - 22px);
+	outline: 0;
+	border-radius: 3px;
+	border: 1px solid #a9a9a9;
+	transition-duration: 0.2s;
+	color: inherit;
+	&::placeholder {
+		color: #9b9b9b;
+	}
+	&:hover,
+	&:focus {
+		border: 1px solid $mainColor;
+	}
+	&:focus {
+		box-shadow: inset 0px 0px 0px 1px $mainColor;
+	}
+	&:disabled {
+		background: #eee;
+		border: 1px solid #ddd;
+	}
+	&.invalid {
+		border: 1px solid $dangerColor;
+	}
+}
+.input-g.small {
+	font-size: 14px;
+	padding: 7px;
+	max-width: calc(100% - 16px);
+	@media screen and (max-width: $mediaBreak1) {
+		font-size: 16px; // prevent zoom in from safari
+	}
+}
+.input-g.no-marg {
+	margin: 0;
+}
+.input-g.small-marg {
+	margin-bottom: 5px;
+}
+.input-g:not(.with-arrows) {
+	/* Chrome, Safari, Edge, Opera */
+	&::-webkit-outer-spin-button,
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+}
+textarea.input-g {
+	font-size: 14px;
+	width: 100%;
+	min-width: 100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	@media screen and (max-width: $mediaBreak1) {
+		font-size: 16px;
+	}
+}
+
+.btn-g {
+	background: #fff;
+	display: inline-flex;
+	align-items: center;
+	cursor: pointer;
+	color: $textColor;
+	font-size: 14px;
+	font-weight: 500;
+	border-radius: 5px;
+	border: 1px solid #ddd;
+	padding: 6px 10px;
+	transition-duration: 0.15s;
+	.icon {
+		font-size: 18px;
+		margin-left: 5px;
+	}
+	&:hover {
+		color: #333;
+		border: 1px solid #aaa;
+	}
+}
+.btn-g.primary {
+	background: $mainColor;
+	border-color: $mainColor;
+	&:hover {
+		background: $mainColor_faded;
+		border-color: $mainColor_faded;
+	}
+	color: white;
+}
+.btn-g.striped {
+	border: 1px dashed #aaa;
+	background: none;
+	&:hover {
+		border-color: #444;
+		color: #444;
+	}
+}
+.btn-g.normal-weight {
+	@include font-w-normal-g;
+}
+.btn-g.faded {
+	color: $textColor_faded;
+}
+.btn-g.danger {
+	background: #d05050;
+	border-color: #d05050;
+	&:hover {
+		background: #d65e5e;
+		border-color: #d65e5e;
+	}
+	color: white;
+}
+.btn-g.small {
+	font-size: 10px;
+	padding: 3px 6px;
+}
+.btn-g.small-med {
+	font-size: 12px;
+}
+.btn-g.medium {
+	font-size: 16px;
+}
+.btn-g.big {
+	@include header-g;
+	font-size: 18px;
+	padding: 12px 40px;
+	display: flex;
+	justify-content: center;
+}
+.btn-g.centered {
+	display: flex;
+	justify-content: center;
+}
+.btn-g.no-marg {
+	margin: 0;
+}
+.btn-g.with-marg {
+	margin-bottom: 10px;
+}
+.btn-g.no-pad {
+	padding: 0;
+}
+.btn-g.clear {
+	border: none;
+	background: none;
+	margin: 0px;
+	padding: 0px;
+	&:hover {
+		text-decoration: underline;
+		color: $blueColor;
+	}
+}
+.btn-g + .btn-g {
+	margin-left: 10px;
+	&.small {
+		margin-left: 5px;
+	}
+}
+.btn-g {
+	&:disabled {
+		cursor: default;
+		background: #f5f5f5;
+		color: #aaa;
+		&:hover {
+			color: #aaa;
+			background: #f5f5f5;
+			border: 1px solid #ddd;
+		}
+	}
+	&.clear:disabled {
+		background: none;
+		&:hover {
+			border: 0;
+			text-decoration: none;
+		}
+	}
+}
+
+.input-w-btns-g {
+	display: flex;
+	align-items: flex-start;
+	button {
+		margin-left: 5px;
+	}
+}
+
+.radio-group-g {
+	display: flex;
+	align-items: center;
+	font-size: 12px;
+	margin: 5px 0px;
+	> .radio-item {
+		display: flex;
+		input[type='radio'] {
+			cursor: pointer;
+			margin: 0px 6px 3px 0px;
+		}
+		input[type='radio'] + label {
+			cursor: pointer;
+		}
+		margin-left: 8px;
+	}
+	> .radio-item:first-child {
+		margin-left: 0px;
+	}
+}
+
+.card-g {
+	border-radius: 5px;
+	border: 1px solid #eee;
+	border-bottom: 2px solid #eee;
+	transition-duration: 0.2s;
+	color: #aaa;
+	@include box-g;
+	&:hover,
+	&.selected {
+		border: 1px solid $mainColor;
+		border-bottom: 2px solid $mainColor;
+		color: $mainColor_text;
+	}
+}
+
+.tab-list-g {
+	color: #9e9e9e;
+	> .active,
+	> :hover {
+		cursor: pointer;
+		color: #222;
+	}
+}
+
+// Used in homepage
+.btn-stack-g {
+	li {
+		display: flex;
+		align-items: center;
+		position: relative;
+		margin-bottom: 15px;
+	}
+	.btn {
+		margin-bottom: 0px;
+		width: 100%;
+	}
+	.btn + .tooltip {
+		position: absolute;
+		left: 200px;
+		width: 200px;
+		opacity: 0;
+		max-width: 100%;
+	}
+	.btn:hover + .tooltip {
+		opacity: 1;
+	}
+	.btn-click-content {
+		position: absolute;
+		left: 200px;
+		background: #fff;
+		z-ndex: 10;
+	}
+	@media screen and (max-width: 800px) {
+		.btn-click-content {
+			left: -50px;
+			top: 0px;
+		}
+	}
+	@media screen and (max-width: $mediaBreak1) {
+		.btn + .tooltip {
+			display: none;
+		}
+	}
+}

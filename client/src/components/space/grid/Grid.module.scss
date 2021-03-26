@@ -1,0 +1,134 @@
+@import '../../../styles/_variables';
+
+.container {
+	display: grid;
+	grid-template-columns: 3fr minmax(165px, 1fr);
+	grid-gap: 10px 20px;
+	grid-template-areas:
+		'grid objectstatus'
+		'statusbar objectstatus'
+		'footer objectstatus';
+
+	@media screen and (max-width: $mediaBreak1) {
+		grid-template-columns: 1fr;
+		grid-template-areas:
+			'grid'
+			'statusbar'
+			'objectstatus'
+			'footer';
+	}
+}
+
+.gridContainer {
+	@include box-g;
+	padding: 60px 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+	@media screen and (max-width: $mediaBreak1) {
+		padding: 10px;
+	}
+	.editY {
+		margin-top: 5px;
+		display: flex;
+		justify-content: center;
+	}
+	.editX {
+		margin-bottom: 18px;
+		margin-left: 5px;
+	}
+	.editY,
+	.editX {
+		button {
+			display: block;
+		}
+		.icon {
+			font-size: 20px;
+			margin: 2px;
+		}
+	}
+}
+.gridContainer .inner {
+	max-width: 100%;
+}
+.gridContainer .inner2 {
+	max-width: 100%;
+	overflow: scroll;
+	display: flex;
+}
+.gridContainer .mainGrid {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	border: 1px solid #eee;
+	padding: 2px;
+}
+
+// Object Status
+.objectStatusContainer {
+	&.isFromObjectKit {
+		.objectStatusField:last-child {
+			border-bottom: 0px;
+		}
+	}
+}
+
+.objectStatusContainer .header {
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+	.element {
+		padding-right: 10px;
+		display: flex;
+	}
+	.name {
+		font-size: 16px;
+		font-weight: bold;
+		color: #000;
+	}
+}
+
+.objectStatusContainer .objectField {
+	border-bottom: 1px solid #e6e6e6;
+	padding-bottom: 20px;
+	margin-bottom: 20px;
+	&.isNotLast {
+		border-bottom: 1px solid #e6e6e6;
+	}
+}
+
+.objectStatusContainer .advEditing {
+	padding-left: 10px;
+	border-left: 1px solid #ddd;
+	width: 149px;
+	@media screen and (max-width: $mediaBreak1) {
+		width: 169px;
+	}
+}
+
+.object {
+	background: white;
+	padding: 2px;
+	display: flex;
+	align-items: center;
+	border: 1px solid #eee;
+	border: 1px solid #fff;
+	border-radius: 3px;
+	cursor: pointer;
+	width: 34px;
+	justify-content: center;
+
+	&.selected {
+		border: 1px solid #666;
+	}
+	&.isEmpty {
+		color: #fff;
+	}
+}
+.showEmpties .object.isEmpty {
+	color: #ddd;
+	&:hover {
+		color: #aaa;
+	}
+}

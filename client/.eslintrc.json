@@ -1,0 +1,38 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["plugin:react/recommended", "airbnb", "prettier"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["react"],
+  "settings": {
+    // import settings should be following jsconfig.json
+    "import/resolver": {
+      // "node": { "paths": ["./"] } // Import with absolute paths from root of the project
+      "alias": {
+        "map": [["src", "./src"]]
+      }
+    }
+  },
+  "rules": {
+    "spaced-comment": "warn",
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/jsx-indent": ["error", "tab"],
+    "react/jsx-indent-props": ["error", "tab"],
+    "react/jsx-curly-newline": "off",
+    "no-alert": "off",
+    "arrow-body-style": "off",
+    // temp: https://github.com/facebook/create-react-app/issues/10021
+    "no-unused-vars": "warn",
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "no-unreachable": "warn",
+    "consistent-return": "warn"
+  }
+}

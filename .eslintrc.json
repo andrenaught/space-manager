@@ -1,0 +1,8 @@
+{
+	"root": true,
+	"extends": ["prettier"],
+	"parserOptions": {
+		"ecmaVersion": 12,
+		"sourceType": "module"
+	}
+}

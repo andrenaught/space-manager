@@ -1,0 +1,236 @@
+@import '../styles/_variables.scss';
+
+.ui-modal {
+	visibility: hidden; /* Hidden by default */
+	opacity: 0;
+	position: fixed; /* Stay in place */
+	z-index: 100; /* Sit on top */
+	top: 0;
+	left: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+
+	&.centered {
+		padding-top: 0px;
+		display: flex;
+		justify-content: center;
+	}
+
+	// "contained" Responsiveness: the modal will stay at a certain height, it will allow to scroll internally if running out of space
+	&.centered.contained {
+		align-items: center;
+		.modal-content {
+			max-height: 500px; // can be overriden
+			overflow: scroll;
+		}
+	}
+}
+
+.ui-modal .modal-content-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+}
+
+.ui-modal .modal-content {
+	max-height: calc(100% - 40px); // give extra space outside modal
+	width: 550px;
+	max-width: calc(100% - 20px);
+	box-shadow: $boxShadow;
+	border-radius: 5px;
+	background: #fff;
+	position: relative;
+
+	.close-btn {
+		background: none;
+		position: absolute;
+		right: 2px;
+		top: 2px;
+		.icon {
+			font-size: 32px;
+			color: #aaa;
+		}
+		&:hover {
+			.icon {
+				color: #000;
+			}
+		}
+	}
+
+	.inner-content {
+		max-height: calc(100% - 40px); // account for padding
+		padding: 20px;
+		overflow: scroll;
+	}
+	.inner-content::-webkit-scrollbar {
+		display: none; // hide scrollbar
+	}
+}
+
+.ui-modal.modal-open {
+	opacity: 1;
+	visibility: visible;
+}
+
+.ui-modal-filter {
+	visibility: hidden; /* Hidden by default */
+	opacity: 0;
+	position: fixed;
+	z-index: 50; /* Sit on top */
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: #000 0% 0%;
+	// backdrop-filter: blur(25px); // frosted blur, turning this off - i think this was causing some random flickering bug (triggers more when scrolling i think), also makes it was laggier
+
+	&.modal-open {
+		opacity: 0.68;
+		visibility: visible;
+	}
+}
+
+.ui-time-picker {
+	display: inline-block;
+	.time-selector {
+		position: absolute;
+		display: flex;
+		align-tiems: center;
+		list-style-type: none;
+		z-index: 10;
+		button {
+			padding: 8px 12px;
+			cursor: pointer;
+		}
+		button:hover,
+		li.selected button {
+			background: #eee;
+		}
+	}
+	.time-section-list {
+		height: 150px;
+		overflow-y: scroll;
+	}
+
+	&.invalid {
+		background: red;
+	}
+}
+
+.ui-toggle {
+	position: relative;
+	display: inline-block;
+	width: 42px;
+	height: 22px;
+
+	input {
+		opacity: 0;
+		width: 0;
+		height: 0;
+	}
+
+	.slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: #ccc;
+		transition: 0.4s;
+	}
+
+	.slider:before {
+		position: absolute;
+		content: '';
+		height: 18px;
+		width: 18px;
+		left: 2px;
+		bottom: 2px;
+		background: white;
+		transition: 0.4s;
+	}
+
+	input:checked + .slider {
+		background: #2196f3;
+	}
+	input:disabled + .slider {
+		background: #ddd;
+		cursor: default;
+	}
+
+	input:focus + .slider {
+		box-shadow: 0 0 1px #2196f3;
+	}
+
+	input:checked + .slider:before {
+		transform: translateX(20px);
+	}
+
+	/* Rounded sliders */
+	.slider.round {
+		border-radius: 12px;
+	}
+
+	.slider.round:before {
+		border-radius: 50%;
+	}
+}
+
+.ui-text-with-copy {
+	.main {
+		font-size: 12px;
+		display: inline-flex;
+		border: 1px solid #eaeaea;
+		background: #fafafa;
+		border-radius: 3px;
+		width: 100%;
+	}
+
+	.text {
+		@include font-mono-g;
+		padding: 10px;
+		overflow: scroll;
+		&::-webkit-scrollbar {
+			display: none; // hide scrollbar
+		}
+	}
+
+	.btn-cont {
+		position: relative;
+	}
+
+	.btn {
+		height: 100%;
+		align-items: center;
+		display: flex;
+		padding: 0px 10px;
+		border-left: 1px solid #ddd;
+		background: #eee;
+		transition-duration: 0.2s;
+
+		&:hover,
+		&:disabled {
+			background: #ddd;
+		}
+	}
+
+	.feedback {
+		padding: 4px 6px;
+		background: #fafafa;
+		margin-top: 5px;
+		border: 1px solid #eaeaea;
+		right: 0px;
+		position: absolute;
+		opacity: 0;
+		transition-duration: 0.1s;
+	}
+
+	&.show-feedback {
+		.feedback {
+			opacity: 1;
+		}
+	}
+}

@@ -1,0 +1,46 @@
+/* --- COLORS --- */
+$mainColor: #bfc6da;
+$mainColor_faded: #9faac9;
+$mainColor_text: #8a98c1;
+$blueColor: #91b8c7; // used for common UI that uses blue (outlines, links)
+$textColor: #565656;
+$textColor_faded: #9e9e9e;
+$textColor_primary: #8cb0e7;
+$dangerColor: #d05050;
+
+/* --- TYPOGRAPHY --- */
+$fontMedium: 500;
+$fontBold: 700;
+
+/* --- SPACING --- */
+$navHeight: 59px;
+
+/* --- MISC --- */
+$boxShadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+$mediaBreak1: 501px;
+
+@mixin box-g {
+	box-shadow: $boxShadow;
+	background: #fff;
+	border-radius: 5px;
+}
+@mixin faded-g {
+	color: $textColor_faded;
+	stroke: $textColor_faded;
+	fill: $textColor_faded;
+}
+
+@mixin font-normal-g {
+	font-family: 'Helvetica Neue', 'Arial';
+}
+@mixin font-mono-g {
+	font-family: 'Courier New';
+}
+@mixin font-w-normal-g {
+	font-weight: normal;
+}
+
+@mixin header-g {
+	font-weight: bold;
+	letter-spacing: 2px;
+}

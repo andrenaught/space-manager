@@ -1,0 +1,65 @@
+// spacing & positioning
+.container-g {
+	max-width: calc(100% - 40px);
+	width: 1240px;
+	margin: 0 auto;
+
+	&.uses-rows {
+		max-width: 100%;
+		> .row {
+			padding: 0px 20px;
+		}
+	}
+	> * {
+		&.centered {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+	}
+	&.small {
+		width: 900px;
+	}
+	@media screen and (max-width: $mediaBreak1) {
+		max-width: calc(100% - 20px);
+		&.uses-rows {
+			> .row {
+				padding: 0px 10px;
+			}
+		}
+	}
+}
+
+.marg-top-g {
+	margin-top: 15px;
+}
+.marg-bot-g {
+	margin-bottom: 15px;
+}
+
+.spaced-out-g {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+	margin-bottom: 30px;
+	@media screen and (max-width: $mediaBreak1) {
+		margin-bottom: 10px;
+		margin-top: 10px;
+		align-items: flex-start;
+		flex-direction: column;
+		> * {
+			&:first-child {
+				margin-bottom: 10px;
+			}
+		}
+		&.reversed-m {
+			flex-direction: column-reverse;
+			> * {
+				&:first-child {
+					margin-bottom: 0px;
+					margin-top: 10px;
+				}
+			}
+		}
+	}
+}

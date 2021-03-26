@@ -1,0 +1,218 @@
+@import '../../styles/_variables';
+
+.container {
+	display: flex;
+	background: #fafafa;
+	padding: 40px 0px;
+	@media screen and (max-width: $mediaBreak1) {
+		flex-direction: column-reverse;
+		padding: 20px 0px 0px 0px;
+	}
+}
+.titleInput {
+	border: 1px solid rgba(0, 0, 0, 0);
+	font-size: 30px;
+	font-weight: bold;
+	padding-left: 0px;
+	background: none;
+	box-shadow: none;
+	&:disabled {
+		background: none;
+		border: 1px solid rgba(0, 0, 0, 0);
+	}
+	@media screen and (max-width: $mediaBreak1) {
+		padding: 0px;
+		margin-bottom: 5px;
+	}
+}
+.descriptionInput {
+	border: 1px solid rgba(0, 0, 0, 0);
+	padding-left: 0px;
+	padding-top: 0px;
+	background: none;
+	box-shadow: none;
+	resize: none;
+	margin-bottom: 0px;
+	&:disabled {
+		background: none;
+		border: 1px solid rgba(0, 0, 0, 0);
+	}
+}
+
+.objectKit {
+	@include box-g;
+	display: flex;
+	align-items: center;
+	.separator {
+		border-right: 1px solid #cbcbcb;
+		width: 1px;
+		align-self: stretch;
+		margin: 3px 0px;
+	}
+	> .label {
+		font-weight: normal;
+		padding: 13px 15px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+		position: relative;
+
+		.showOnIdle,
+		.showOnHover {
+			display: flex;
+			align-items: center;
+			position: absolute;
+			// Fix chrome flicker (element moving) when translating
+			-webkit-perspective: 1000;
+			-webkit-backface-visibility: hidden;
+			transition-duration: 0.4s;
+		}
+		.showOnIdle {
+			transform: translateY(0px);
+			top: 33px;
+		}
+		.showOnHover {
+			opacity: 0;
+			transform: translateY(15px);
+			top: 40px;
+			font-size: 10px;
+			color: $textColor_faded;
+			font-weight: bold;
+		}
+		.text {
+			// Fix chrome flicker (element moving) when translating
+			-webkit-perspective: 1000;
+			-webkit-backface-visibility: hidden;
+			transform: translateY(0);
+			transition-duration: 0.2s;
+		}
+		&:hover:not([disabled]),
+		&.toggledOn {
+			cursor: pointer;
+			.text {
+				transition-duration: 0.5s;
+				transform: translateY(-8px);
+			}
+			.showOnIdle {
+				opacity: 0;
+				transform: translateY(-15px);
+			}
+			.showOnHover {
+				transform: translateY(0px);
+				top: 28px;
+				opacity: 1;
+			}
+		}
+		&.toggledOn {
+			cursor: default;
+		}
+		&:disabled {
+			cursor: default;
+		}
+	}
+	.row {
+		display: flex;
+	}
+	.object {
+		display: flex;
+		align-items: center;
+		border: 1px solid rgba(0, 0, 0, 0);
+		cursor: pointer;
+		padding: 5px;
+	}
+	.selected {
+		border: 1px solid #ddd;
+	}
+}
+.kitLabel {
+	padding-top: 10px;
+	margin-top: 10px;
+	margin-bottom: 5px;
+	border-top: 1px solid #eee;
+}
+.kitObjectCont {
+	margin: 0px 2px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	&:first-child {
+		margin-left: 0px;
+	}
+	button {
+		display: flex;
+	}
+}
+
+.quickActionList {
+	display: flex;
+	align-items: center;
+}
+.quickActionList > .actionItem {
+	position: relative;
+	display: flex;
+	.tooltip {
+		font-size: 12px;
+		width: 300px;
+		transition-duration: 0.2s;
+		opacity: 0;
+		position: absolute;
+		bottom: 25px;
+	}
+	.icon {
+		font-size: 22px;
+		display: flex;
+		cursor: pointer;
+	}
+	.icon.active {
+		display: none;
+	}
+	&:hover {
+		.tooltip {
+			opacity: 1;
+		}
+		.icon.active {
+			color: $mainColor;
+			display: block;
+		}
+		.icon.inactive {
+			display: none;
+		}
+	}
+	&.active {
+		.icon {
+			cursor: default;
+		}
+		.icon.active {
+			color: $mainColor;
+			display: block;
+		}
+		.icon.inactive {
+			display: none;
+		}
+	}
+}
+.quickActionList.hideTooltip {
+	> .actionItem:hover {
+		.tooltip {
+			transition-duration: 0s;
+			opacity: 0;
+		}
+	}
+}
+
+// Sidebar
+.sidebarCont {
+	@include box-g;
+}
+.sidebarHeader {
+	border-bottom: 1px solid #cbcbcb;
+	padding: 10px;
+	margin-bottom: 5px;
+}
+.sidebarItem {
+	padding: 10px;
+	> * {
+		text-align: left;
+	}
+}
