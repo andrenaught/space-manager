@@ -5,9 +5,10 @@
 Display the positioning and status of objects within a given space. The goal is to create something like a live map to visually communicate what's happening - whether it's to share with other people or for personal reference.
 
 ### Examples
-* Parking Lot - show which parking spots are open
-* Laundromat - show which washing machines are being used and how much time is left
-* Seating - show which seats are taken, as well as the name of the person for each seat
+
+- Parking Lot - show which parking spots are open
+- Laundromat - show which washing machines are being used and how much time is left
+- Seating - show which seats are taken, as well as the name of the person for each seat
 
 ## Setup
 
