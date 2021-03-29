@@ -27,23 +27,6 @@ module.exports = {
 						`another user made changes in space: ${spaceId}`
 					)
 			})
-			// When user leaves space
-			socket.on('beforeunload_space', (data) => {
-				const { spaceId, spaceUpdated } = data
-
-				// Broadcast updated changes
-				if (spaceUpdated) {
-					// Wait for changes to finish (hacky solution, but these changes aren't crucial)
-					setTimeout(() => {
-						socket
-							.to(spaceId)
-							.emit(
-								'space has updated',
-								`another user made changes in space: ${spaceId}`
-							)
-					}, 500)
-				}
-			})
 			// When user disconnects
 			socket.on('disconnecting', () => {
 				socket.rooms.forEach((room) => {

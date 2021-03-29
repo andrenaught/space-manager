@@ -70,14 +70,14 @@ router.get('/space/:space_id/grid_object', checkAPICreds, async (req, res) => {
 		const {
 			rows,
 		} = await db.query(
-			'SELECT grid, grid_values, owner FROM spaces WHERE id=$1',
+			'SELECT objects, grid, grid_values, owner FROM spaces WHERE id=$1',
 			[space_id]
 		)
 
 		if (rows.length === 0)
 			return res.status(404).json({ message: 'Space not found' })
 
-		const { grid, grid_values, owner } = rows[0]
+		const { objects, grid, grid_values, owner } = rows[0]
 		if (owner !== APIKeyOwner.id) return res.status(403).json({})
 
 		const gridObject = (grid[row] && grid[row][col]) || null
@@ -86,10 +86,17 @@ router.get('/space/:space_id/grid_object', checkAPICreds, async (req, res) => {
 
 		const defaultGridVals = new Array(grid.length)
 			.fill()
-			.map(() => new Array(grid[0].length).fill().map(() => null))
+			.map(() => new Array(grid[0].length).fill().map(() => ({})))
 		const gridVals = grid_values != null ? grid_values : defaultGridVals
 
-		const gridObjectState = gridVals[row][col]
+		// get defaults
+		const masterObject = objects.find((x) => x.localId === gridObject.localId)
+		const defaultVals = masterObject.fields.reduce((acc, field) => {
+			acc[field.slug] = { value: field.value }
+			return acc
+		}, {})
+
+		const gridObjectState = { ...defaultVals, ...gridVals[row][col] }
 
 		return res.json({ grid_object: gridObjectState })
 	} catch (err) {
@@ -143,14 +150,14 @@ router.put('/space/:space_id/grid_object', checkAPICreds, async (req, res) => {
 		const updatedState = {}
 
 		masterObject.fields.forEach((field) => {
-			// return field // ignore fields that the object cant have
+			// ignore fields that the object cant have or keep current state if not asked to change
 			if (new_state[field.slug] == null) {
 				if (gridObjectState != null && gridObjectState[field.slug])
-					updatedState[field.slug] = gridObjectState[field.slug] // return current state
-				return // ignore field if no current or new state exists for it
+					updatedState[field.slug] = gridObjectState[field.slug] // keep
+				return // ignore
 			}
 
-			updatedState[field.slug] = new_state[field.slug]
+			updatedState[field.slug] = new_state[field.slug] // replace with new state
 		})
 
 		const newGridValues = gridVals

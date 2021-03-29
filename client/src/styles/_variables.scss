@@ -13,11 +13,15 @@ $fontMedium: 500;
 $fontBold: 700;
 
 /* --- SPACING --- */
+$containerWidth: 1240px;
+$containerWidthS: 900px;
 $navHeight: 59px;
+$spaceSidebarWidth: 120px;
 
 /* --- MISC --- */
 $boxShadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-$mediaBreak1: 501px;
+$mediaBreak1: 600px;
+$spaceMediaBreak1: $spaceSidebarWidth * 2 + $containerWidth + 60px;
 
 @mixin box-g {
 	box-shadow: $boxShadow;

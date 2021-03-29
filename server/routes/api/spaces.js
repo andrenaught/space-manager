@@ -1,6 +1,7 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
 const db = require('../../db/index')
+const { selfSocket } = require('../../sockets/index').get()
 const { isNumeric } = require('../../utils/core')
 const { isLoggedIn, checkAuth } = require('../../middleware/auth')
 const { isSpaceOwner } = require('../../utils/auth')
@@ -176,6 +177,7 @@ router.put('/:space_id', checkAuth, async (req, res) => {
 			grid,
 			gridValues,
 			settings,
+			triggerSocket = false,
 		} = req.body
 		const cols = [
 			{ slug: 'name', value: name },
@@ -278,6 +280,13 @@ router.put('/:space_id', checkAuth, async (req, res) => {
 		const { rows } = await db.query(queryString, queryCols)
 		if (rows.length === 0)
 			return res.status(404).json({ message: 'space not found' })
+
+		if (triggerSocket) {
+			// update people in the 'space' room
+			selfSocket.emit('update space', {
+				spaceId: space_id,
+			})
+		}
 		return res.json({})
 	} catch (err) {
 		console.error(err)

@@ -1,10 +1,12 @@
 // spacing & positioning
 .container-g {
 	max-width: calc(100% - 40px);
-	width: 1240px;
+	width: $containerWidth;
+	min-width: 0px;
 	margin: 0 auto;
 
 	&.uses-rows {
+		width: $containerWidth + 40px;
 		max-width: 100%;
 		> .row {
 			padding: 0px 20px;
@@ -18,7 +20,10 @@
 		}
 	}
 	&.small {
-		width: 900px;
+		width: $containerWidthS;
+	}
+	&.small.uses-rows {
+		width: $containerWidthS + 40px;
 	}
 	@media screen and (max-width: $mediaBreak1) {
 		max-width: calc(100% - 20px);

@@ -402,12 +402,13 @@ const GridStatusBar = (props) => {
 			style={{
 				display: 'flex',
 				justifyContent: 'flex-end',
+				alignItems: 'center',
 				padding: '10px',
 			}}
 		>
 			<div style={{ fontWeight: '300', ...textStatusStyle }}>{textStatus}</div>
 			{gridEditingOn && (
-				<div style={{ display: 'flex' }}>
+				<div style={{ display: 'flex', marginLeft: '10px' }}>
 					<button
 						type="button"
 						className="btn-g primary"

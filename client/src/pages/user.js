@@ -104,7 +104,7 @@ const UserPage = () => {
 		if (!ok) return
 
 		setUser(data.user)
-		setEmail(data.user.email)
+		setEmail(data.user.email || '')
 		setIsLoading(false)
 	}
 	useEffect(() => {

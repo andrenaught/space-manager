@@ -24,7 +24,9 @@ import {
 import { useDebounce } from '../utils/core'
 import { AuthContext } from '../../Store'
 
-const socket = io(process.env.REACT_APP_SERVER_URL)
+const socket = io({
+	autoConnect: false,
+})
 const userSettings = {
 	lockedFields: false,
 }
@@ -123,6 +125,7 @@ const Space = (props) => {
 		descriptionPUT = false,
 		publicPUT = false,
 		settingsPUT = false,
+		triggerSocket = false, // when true, the server will emit an update for this space (including self - so this is only used when user leaves)
 		bodyOverride = null, // This is useful for when react state has not updated yet, in other words: the new values aren't available yet.
 	}) => {
 		if (allPUT == null || spaceId == null)
@@ -140,6 +143,7 @@ const Space = (props) => {
 			...((allPUT || descriptionPUT) && { description }),
 			...((allPUT || publicPUT) && { isPublic }),
 			...((allPUT || settingsPUT) && { settings }),
+			...(triggerSocket && { triggerSocket }),
 		}
 		const body = bodyOverride != null ? bodyOverride : defaultBody
 		setIsSaving(true)
@@ -168,9 +172,12 @@ const Space = (props) => {
 		}
 		if (body.name) setOrigName(name)
 		if (body.description) setOrigDescription(description)
-		socket.emit('update space', {
-			spaceId,
-		})
+		// Prevent double updates
+		if (!body.triggerSocket) {
+			socket.emit('update space', {
+				spaceId,
+			})
+		}
 	}
 
 	const undoGridChanges = () => {
@@ -191,77 +198,70 @@ const Space = (props) => {
 			...(pendingChangesRef.current.description && {
 				description: descriptionRef.current,
 			}),
+			triggerSocket: true,
 		}
 		saveSpace({
 			spaceId: idRef.current,
 			allPUT: false,
 			bodyOverride: body,
 		})
-		socket.emit('beforeunload_space', {
-			spaceId: idRef.current,
-			spaceUpdated: userPermissionsRef.current.type === 'owner',
-		})
 	}
 
 	useEffect(() => {
-		// "user joined" will include current client, so this will run initially no matter what
-		socket.on('user joined', (val) => {
-			setTotalConnectedUsers(val.totalConnectedUsers)
-		})
-		socket.on('user disconnected', () => {
-			setTotalConnectedUsers((curr) => curr - 1)
-		})
-		socket.on('alert', (val) => {
-			alert(val)
-		})
-		// When another user has updated the space, reload the space.
-		// POSSIBLE IMPROVEMENT:
-		// - We could either:
-		//   (1) Only reload column from DB that has changed
-		//   (2) dont save to DB yet, instead save changed data in server memory. Then periodically clear changed data in server memory and save to DB.
-		//   (3) a mixture of 1 and 2, depending on the data.
-		// - Will need to research more on optimizing this.
-		socket.on('space has updated', async () => {
-			setIsUpdating(true)
-			await loadSpace(id) // refresh data
-			setIsUpdating(false)
-		})
-
-		window.addEventListener('beforeunload', onUserLeave) // Will run when user completely leaves from app (refresh, tab close, window close)
-		return () => {
-			// Will run when user leaves page (but still within the app)
-			window.removeEventListener('beforeunload', onUserLeave)
-			onUserLeave()
-		}
-	}, [])
-
-	useEffect(() => {
-		if (id && !Number.isNaN(Number(id))) {
+		const isValid = id && !Number.isNaN(Number(id))
+		if (isValid) {
+			// Load
+			socket.open()
 			setPendingChanges({})
 			setSpaceIsLoading(true)
 			loadSpace(id)
-			return
+
+			// "user joined" will include current client, so this will run initially no matter what
+			socket.on('user joined', (val) => {
+				setTotalConnectedUsers(val.totalConnectedUsers)
+			})
+			socket.on('user disconnected', () => {
+				setTotalConnectedUsers((curr) => curr - 1)
+			})
+			// When another user has updated the space, reload the space.
+			// POSSIBLE IMPROVEMENT:
+			// - We could either:
+			//   (1) Only reload column from DB that has changed
+			//   (2) dont save to DB yet, instead save changed data in server memory. Then periodically clear changed data in server memory and save to DB.
+			//   (3) a mixture of 1 and 2, depending on the data.
+			// - Will need to research more on optimizing this.
+			socket.on('space has updated', async () => {
+				setIsUpdating(true)
+				await loadSpace(id) // refresh data
+				setIsUpdating(false)
+			})
+		} else {
+			setStatusCode(404)
 		}
-		setStatusCode(404)
+
+		if (isValid) {
+			window.addEventListener('beforeunload', onUserLeave) // Will run when user completely leaves from app (refresh, tab close, window close)
+			return () => {
+				// Will run when user leaves page (but still within the app)
+				window.removeEventListener('beforeunload', onUserLeave)
+				onUserLeave()
+				socket.close()
+			}
+		}
+		return () => {}
 	}, [id])
 
 	// Manage user count
 	useEffect(() => {
 		// only run this once
 		if (broadcastedJoin) return
+		if (isLoggedIn && user == null) return // wait for user info
 
-		if (isLoggedIn && user !== null) {
-			setBroadcastedJoin(true)
-			socket.emit('join room', {
-				id,
-				user: { id: user.id, username: user.username },
-			})
-		} else if (!isLoggedIn) {
-			setBroadcastedJoin(true)
-			socket.emit('join room', {
-				id,
-			})
-		}
+		setBroadcastedJoin(true)
+		socket.emit('join room', {
+			id,
+			...(user != null && { user: { id: user.id, username: user.username } }),
+		})
 	}, [user])
 
 	// auto save on name & description
@@ -324,8 +324,8 @@ const Space = (props) => {
 						setIsPublic={setIsPublic}
 					/>
 				)}
-				<div className="container-g uses-rows small">
-					<div className="row">
+				<div className={`container-g ${sty.mainContainer}`}>
+					<div>
 						<QuickActions
 							isFavorited={isFavorited}
 							setIsFavorited={setIsFavorited}
@@ -333,6 +333,7 @@ const Space = (props) => {
 						<div>
 							<input
 								className={`input-g ${sty.titleInput}`}
+								maxLength="15"
 								type="text"
 								value={name || ''}
 								placeholder="Name"
@@ -439,7 +440,7 @@ const ObjectKit = (props) => {
 				)}
 			</button>
 			<div className={sty.separator} />
-			<div style={{ display: 'flex', margin: '0px 10px' }}>
+			<div style={{ display: 'flex', margin: '0px 10px', overflow: 'auto' }}>
 				{objectToolbox.map((object) => {
 					const isSelected = copiedObject && object.name === copiedObject.name
 					return (

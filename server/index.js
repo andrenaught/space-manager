@@ -6,22 +6,9 @@ const http = require('http').createServer(app)
 
 const port = process.env.PORT || 5000
 const path = require('path')
-const meAPIRoute = require('./routes/api/me')
-const usersAPIRoute = require('./routes/api/users')
-const spacesAPIRoute = require('./routes/api/spaces')
-const objectsAPIRoute = require('./routes/api/objects')
 
 // Init sockets
-require('./sockets/index').init(
-	http,
-	{
-		cors: {
-			origin: process.env.VALID_CLIENT_URLS.split(','),
-			methods: ['GET', 'POST'],
-		},
-	},
-	port
-)
+require('./sockets/index').init(http, {}, port)
 
 // Misc middleware
 app.use(express.json()) // allows to read data from client (like body-parser)
@@ -35,10 +22,10 @@ app.get('/', (_req, res) => {
 app.use('/static', express.static(path.join(__dirname, '/public')))
 
 // Routes
-app.use('/api/me', meAPIRoute)
-app.use('/api/users', usersAPIRoute)
-app.use('/api/spaces', spacesAPIRoute)
-app.use('/api/objects', objectsAPIRoute)
+app.use('/api/me', require('./routes/api/me'))
+app.use('/api/users', require('./routes/api/users'))
+app.use('/api/spaces', require('./routes/api/spaces'))
+app.use('/api/objects', require('./routes/api/objects'))
 
 // User facing API
 app.use('/api/v1', require('./routes/api/v1/index'))

@@ -180,6 +180,7 @@ const ObjectStatus = (props) => {
 		props.editObject({
 			allPUT: false,
 			gridPUT: true,
+			gridValuesPUT: true,
 			pos: object.pos,
 			newObject: {
 				...emptyObject,

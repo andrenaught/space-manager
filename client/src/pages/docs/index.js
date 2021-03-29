@@ -25,7 +25,7 @@ const DocsPage = () => (
 	<div className="container-g">
 		<div
 			className="font-normal-g content-g"
-			style={{ width: '600px', margin: '50px auto' }}
+			style={{ width: '600px', maxWidth: '100%', margin: '50px auto' }}
 		>
 			<h1 style={{ marginBottom: '5px' }}>Documentation</h1>
 			<div style={{}}>
@@ -70,7 +70,7 @@ const DocsPage = () => (
 						borderRadius: '2px',
 					}}
 				>
-					{`${process.env.REACT_APP_SERVER_URL}/api/v1`}
+					{`${window.location.origin}/api/v1`}
 				</span>
 			</div>
 			<ReactMarkdown renderers={renderers}>{DocsAPIMD}</ReactMarkdown>

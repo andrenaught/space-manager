@@ -16,6 +16,7 @@ const Footer = (props) => {
 			</div>
 			<textarea
 				className={`input-g ${sty.descriptionInput}`}
+				maxLength="200"
 				rows="10"
 				value={description}
 				placeholder="Description"

@@ -54,10 +54,12 @@
 }
 .gridContainer .inner2 {
 	max-width: 100%;
-	overflow: scroll;
+	max-height: 75vh;
+	overflow: auto;
 	display: flex;
 }
 .gridContainer .mainGrid {
+	height: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;

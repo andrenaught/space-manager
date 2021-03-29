@@ -51,7 +51,7 @@ const convertGridToFrontend = (grid, gridValues, objectKit) => {
 				isEmpty: false,
 				...srcObject,
 				...object,
-				state: hasValue ? gridValues[y][x] : null,
+				state: hasValue && gridValues[y] && gridValues[y][x] ? gridValues[y][x] : null,
 				pos: { x, y },
 			}
 		})

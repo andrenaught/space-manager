@@ -9,6 +9,22 @@
 		padding: 20px 0px 0px 0px;
 	}
 }
+.mainContainer {
+	width: $containerWidth + 40px;
+	> * {
+		padding: 0px 20px;
+	}
+	@media screen and (max-width: $spaceMediaBreak1) {
+		width: $containerWidthS + 40px;
+		padding-left: $spaceSidebarWidth;
+	}
+	@media screen and (max-width: $mediaBreak1) {
+		padding-left: 0px;
+		> * {
+			padding: 0px;
+		}
+	}
+}
 .titleInput {
 	border: 1px solid rgba(0, 0, 0, 0);
 	font-size: 30px;
@@ -19,6 +35,8 @@
 	&:disabled {
 		background: none;
 		border: 1px solid rgba(0, 0, 0, 0);
+		-webkit-text-fill-color: $textColor;
+		-webkit-opacity: 1;
 	}
 	@media screen and (max-width: $mediaBreak1) {
 		padding: 0px;
@@ -36,6 +54,8 @@
 	&:disabled {
 		background: none;
 		border: 1px solid rgba(0, 0, 0, 0);
+		-webkit-text-fill-color: $textColor;
+		-webkit-opacity: 1;
 	}
 }
 
@@ -50,6 +70,7 @@
 		margin: 3px 0px;
 	}
 	> .label {
+		flex-shrink: 0;
 		font-weight: normal;
 		padding: 13px 15px;
 		display: flex;
@@ -203,6 +224,16 @@
 
 // Sidebar
 .sidebarCont {
+	width: $spaceSidebarWidth;
+	flex-shrink: 0;
+	position: fixed;
+	z-index: 50;
+	@media screen and (max-width: $mediaBreak1) {
+		position: static;
+		width: 100%;
+	}
+}
+.sidebar {
 	@include box-g;
 }
 .sidebarHeader {

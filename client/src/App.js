@@ -83,7 +83,7 @@ const Header = (props) => {
 									</div>
 									<div className="dropdown-item stick-right">
 										<div className="content">
-											<Link to='/user' className='nav-link maxed-length'>
+											<Link to="/user" className="nav-link maxed-length">
 												{user?.username}
 											</Link>
 											<button

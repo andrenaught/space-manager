@@ -33,7 +33,7 @@ REST API endpoints
 Get the state of an object within the grid.
 
 ```bash
-$ curl "{API_URL}/api/v1/space/{:space_id}/grid_object?row=4&col=2" \
+$ curl "{API_URL}/api/v1/space/{space_id}/grid_object?row=4&col=2" \
 -H "Authorization: Bearer {API KEY}"
 ```
 
@@ -46,7 +46,7 @@ Update the state of an object within the grid.
 
 ```bash
 # "user" & "taken" are the field slugs, field slugs can be seen by going in "advanced edit" on the object status section
-$ curl "{API_URL}/api/v1/space/{:space_id}/grid_object" \
+$ curl "{API_URL}/api/v1/space/{space_id}/grid_object" \
 -X PUT \
 -d '
 {
@@ -73,7 +73,7 @@ $ curl "{API_URL}/api/v1/space/{:space_id}/grid_object" \
 Get description of a space.
 
 ```bash
-$ curl "{API_URL}/api/v1/space/{:space_id}/description" \
+$ curl "{API_URL}/api/v1/space/{space_id}/description" \
 -H "Authorization: Bearer {API KEY}"
 ```
 
@@ -82,7 +82,7 @@ $ curl "{API_URL}/api/v1/space/{:space_id}/description" \
 Update description of a space.
 
 ```bash
-$ curl "{API_URL}/api/v1/space/{:space_id}/description" \
+$ curl "{API_URL}/api/v1/space/{space_id}/description" \
 -X PUT \
 -d '{"description": "New description text"}' \
 -H "Content-Type: application/json" \
