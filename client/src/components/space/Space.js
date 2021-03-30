@@ -39,7 +39,6 @@ const Space = (props) => {
 
 	const [statusCode, setStatusCode] = useState(null)
 	const [isUpdating, setIsUpdating] = useState(false)
-	const [broadcastedJoin, setBroadcastedJoin] = useState(false)
 	const [totalConnectedUsers, setTotalConnectedUsers] = useState(0)
 	const [spaceIsLoading, setSpaceIsLoading] = useState(true)
 	const [isSaving, setIsSaving] = useState(false)
@@ -209,6 +208,8 @@ const Space = (props) => {
 
 	useEffect(() => {
 		const isValid = id && !Number.isNaN(Number(id))
+		if (isLoggedIn && user == null) return () => {} // wait for user info
+
 		if (isValid) {
 			// Load
 			socket.open()
@@ -216,6 +217,15 @@ const Space = (props) => {
 			setSpaceIsLoading(true)
 			loadSpace(id)
 
+			// On socket connect or reconnect, send user info if available
+			socket.on('connect', () => {
+				socket.emit('join room', {
+					id,
+					...(user != null && {
+						user: { id: user.id, username: user.username },
+					}),
+				})
+			})
 			// "user joined" will include current client, so this will run initially no matter what
 			socket.on('user joined', (val) => {
 				setTotalConnectedUsers(val.totalConnectedUsers)
@@ -249,20 +259,7 @@ const Space = (props) => {
 			}
 		}
 		return () => {}
-	}, [id])
-
-	// Manage user count
-	useEffect(() => {
-		// only run this once
-		if (broadcastedJoin) return
-		if (isLoggedIn && user == null) return // wait for user info
-
-		setBroadcastedJoin(true)
-		socket.emit('join room', {
-			id,
-			...(user != null && { user: { id: user.id, username: user.username } }),
-		})
-	}, [user])
+	}, [id, user])
 
 	// auto save on name & description
 	useEffect(() => {
