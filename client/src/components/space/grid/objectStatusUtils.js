@@ -69,7 +69,7 @@ const TimerActionBtn = ({ onActionClick, field, state }) => {
 	const lastAction = state?.lastAction
 	const timeDifference = targetDate ? +new Date(targetDate) - +new Date() : -1
 	const timerIsOn = timeDifference > 0
-	const fieldValue = state?.value || field.value
+	const fieldValue = state?.value != null ? state.value : field.value
 
 	if (timerIsOn) {
 		return (
@@ -182,7 +182,7 @@ const objectFieldValue = ({ overrideVal, e }) => {
 	let value
 	if (overrideVal != null) {
 		value = overrideVal
-	} else if (e && e.target && e.target.value) {
+	} else if (e && e.target) {
 		value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
 	}
 	return value

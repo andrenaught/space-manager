@@ -51,7 +51,10 @@ const convertGridToFrontend = (grid, gridValues, objectKit) => {
 				isEmpty: false,
 				...srcObject,
 				...object,
-				state: hasValue && gridValues[y] && gridValues[y][x] ? gridValues[y][x] : null,
+				state:
+					hasValue && gridValues[y] && gridValues[y][x]
+						? gridValues[y][x]
+						: null,
 				pos: { x, y },
 			}
 		})
@@ -88,7 +91,7 @@ const addRow = (grid) => {
 	const newGrid = grid.slice()
 	const xLength = grid[0].length
 	const yLength = grid.length
-	const newRow = new Array(xLength).fill().map((col, x) => ({
+	const newRow = new Array(xLength).fill().map((_col, x) => ({
 		...emptyObject,
 		pos: { x, y: yLength },
 	}))

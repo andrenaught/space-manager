@@ -6,6 +6,7 @@ import io from 'socket.io-client'
 import { DownChevron } from 'src/components/assets/svg'
 import useFetch from 'src/components/utils/useFetch'
 import { ErrorPage } from 'src/components/utils/ErrorPage'
+import usePageVisibility from 'src/components/utils/usePageVisibility'
 import Grid from './grid/Grid'
 import Sidebar from './Sidebar'
 import sty from './Space.module.scss'
@@ -35,6 +36,7 @@ const Space = (props) => {
 	const { rows, cols } = props
 	const appFetch = useFetch()
 	const { id } = useParams()
+	const pageIsVisible = usePageVisibility()
 	const { user, isLoggedIn } = useContext(AuthContext)
 
 	const [statusCode, setStatusCode] = useState(null)
@@ -112,6 +114,12 @@ const Space = (props) => {
 		}
 
 		setSpaceIsLoading(false)
+	}
+
+	const refreshSpace = async () => {
+		setIsUpdating(true)
+		await loadSpace(id) // refresh data
+		setIsUpdating(false)
 	}
 
 	const saveSpace = async ({
@@ -240,10 +248,8 @@ const Space = (props) => {
 			//   (2) dont save to DB yet, instead save changed data in server memory. Then periodically clear changed data in server memory and save to DB.
 			//   (3) a mixture of 1 and 2, depending on the data.
 			// - Will need to research more on optimizing this.
-			socket.on('space has updated', async () => {
-				setIsUpdating(true)
-				await loadSpace(id) // refresh data
-				setIsUpdating(false)
+			socket.on('space has updated', () => {
+				refreshSpace()
 			})
 		} else {
 			setStatusCode(404)
@@ -260,6 +266,15 @@ const Space = (props) => {
 		}
 		return () => {}
 	}, [id, user])
+
+	useEffect(() => {
+		if (spaceIsLoading) return
+
+		// When user comes back to tab after leaving it, get most updated space
+		if (pageIsVisible) {
+			refreshSpace()
+		}
+	}, [pageIsVisible])
 
 	// auto save on name & description
 	useEffect(() => {

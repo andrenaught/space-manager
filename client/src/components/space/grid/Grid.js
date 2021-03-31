@@ -135,7 +135,7 @@ const Grid = (props) => {
 			}
 
 			const newGrid = grid.slice()
-			newGrid[y][x] = { ...copiedObject, pos: { x, y } }
+			newGrid[y][x] = { ...copiedObject, state: null, pos: { x, y } }
 			setGrid(newGrid)
 			clearClipboard()
 			saveSpace({ spaceId: id, allPUT: false, gridPUT: true })

@@ -373,11 +373,9 @@ const ObjectStatus = (props) => {
 						<div style={{ marginTop: '15px' }}>
 							{fields.length > 0 &&
 								fields.map((field, i) => {
-									let { value } = field
 									const fieldState = state[field.slug]
-									if (fieldState) {
-										value = fieldState.value
-									}
+									const value =
+										fieldState?.value != null ? fieldState.value : field.value
 									const fieldInfo = getObjectFieldInfo(
 										field,
 										fieldState,
