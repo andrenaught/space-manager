@@ -25,9 +25,6 @@ import {
 import { useDebounce } from '../utils/core'
 import { AuthContext } from '../../Store'
 
-const socket = io({
-	autoConnect: false,
-})
 const userSettings = {
 	lockedFields: false,
 }
@@ -38,6 +35,9 @@ const Space = (props) => {
 	const { id } = useParams()
 	const pageIsVisible = usePageVisibility()
 	const { user, isLoggedIn } = useContext(AuthContext)
+	const socket = io({
+		autoConnect: false,
+	})
 
 	const [statusCode, setStatusCode] = useState(null)
 	const [isUpdating, setIsUpdating] = useState(false)
