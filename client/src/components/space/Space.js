@@ -6,7 +6,6 @@ import io from 'socket.io-client'
 import { DownChevron } from 'src/components/assets/svg'
 import useFetch from 'src/components/utils/useFetch'
 import { ErrorPage } from 'src/components/utils/ErrorPage'
-import usePageVisibility from 'src/components/utils/usePageVisibility'
 import Grid from './grid/Grid'
 import Sidebar from './Sidebar'
 import sty from './Space.module.scss'
@@ -33,17 +32,19 @@ const Space = (props) => {
 	const { rows, cols } = props
 	const appFetch = useFetch()
 	const { id } = useParams()
-	const pageIsVisible = usePageVisibility()
 	const { user, isLoggedIn } = useContext(AuthContext)
-	const socket = io({
-		autoConnect: false,
-	})
+	const { current: socket } = useRef(
+		io({
+			autoConnect: false,
+		})
+	)
 
-	const [statusCode, setStatusCode] = useState(null)
+	const [loadStatusCode, setLoadStatusCode] = useState(null)
 	const [isUpdating, setIsUpdating] = useState(false)
 	const [totalConnectedUsers, setTotalConnectedUsers] = useState(0)
 	const [spaceIsLoading, setSpaceIsLoading] = useState(true)
 	const [isSaving, setIsSaving] = useState(false)
+	const [isSocketConnecting, setIsSocketConnecting] = useState(true)
 	const [objectToolbox, setObjectToolbox] = useState([])
 	const [userPermissions, setUserPermissions] = useState(null)
 	const [name, setName] = useState(null)
@@ -80,9 +81,14 @@ const Space = (props) => {
 	const [objectKitEditingOn, setObjectKitEditingOn] = useState(false)
 
 	const loadSpace = async (spaceId) => {
+		setIsUpdating(true)
 		const { data, ok, response } = await appFetch(`/api/spaces/${spaceId}`)
+		setTimeout(() => {
+			setIsUpdating(false)
+		}, 400)
 		if (!ok) {
-			setStatusCode(response.status)
+			setIsUpdating(false)
+			setLoadStatusCode(response.status)
 			return
 		}
 		const { space, permissions } = data
@@ -114,12 +120,6 @@ const Space = (props) => {
 		}
 
 		setSpaceIsLoading(false)
-	}
-
-	const refreshSpace = async () => {
-		setIsUpdating(true)
-		await loadSpace(id) // refresh data
-		setIsUpdating(false)
 	}
 
 	const saveSpace = async ({
@@ -223,16 +223,28 @@ const Space = (props) => {
 			socket.open()
 			setPendingChanges({})
 			setSpaceIsLoading(true)
-			loadSpace(id)
+			setIsSocketConnecting(true)
 
-			// On socket connect or reconnect, send user info if available
+			// On socket connect or reconnect
 			socket.on('connect', () => {
+				setIsSocketConnecting(false)
+				loadSpace(id) // fetch data in case any space updates happened before socket was ready to catch them
 				socket.emit('join room', {
 					id,
 					...(user != null && {
 						user: { id: user.id, username: user.username },
 					}),
 				})
+			})
+			// When inactive tabs get suspended / paused by the browser to save resources - the socket disconnects
+			// This often happens when devices go to sleep mode - ex: smartphones (lock mode), laptops (close lid)
+			// When the tab wakes up from this state, the socket will attempt to reconnect
+			// The 'reconnect' event should make sense here but it doesn't seem to run when the tab wakes up
+			// Alternatively, the 'disconnect' event does run when the tab wakes up
+			socket.on('disconnect', (reason) => {
+				if (reason === 'io client disconnect') return // manual disconnect (ex: user moved to another page causing this component to unmount)
+				loadSpace(id) // load space here to update as soon as possible (dont have to wait for socket reconnect)
+				setIsSocketConnecting(true)
 			})
 			// "user joined" will include current client, so this will run initially no matter what
 			socket.on('user joined', (val) => {
@@ -249,10 +261,10 @@ const Space = (props) => {
 			//   (3) a mixture of 1 and 2, depending on the data.
 			// - Will need to research more on optimizing this.
 			socket.on('space has updated', () => {
-				refreshSpace()
+				loadSpace(id)
 			})
 		} else {
-			setStatusCode(404)
+			setLoadStatusCode(404)
 		}
 
 		if (isValid) {
@@ -266,15 +278,6 @@ const Space = (props) => {
 		}
 		return () => {}
 	}, [id, user])
-
-	useEffect(() => {
-		if (spaceIsLoading) return
-
-		// When user comes back to tab after leaving it, get most updated space
-		if (pageIsVisible) {
-			refreshSpace()
-		}
-	}, [pageIsVisible])
 
 	// auto save on name & description
 	useEffect(() => {
@@ -306,7 +309,7 @@ const Space = (props) => {
 		setPendingChanges(copy)
 	}, [debouncedDescription])
 
-	if (statusCode) return <ErrorPage code={statusCode} />
+	if (loadStatusCode) return <ErrorPage code={loadStatusCode} />
 	if (spaceIsLoading)
 		return (
 			<div className="content-section-g screen-centered">Loading space...</div>
@@ -398,6 +401,7 @@ const Space = (props) => {
 								setDescription={setDescription}
 								totalConnectedUsers={totalConnectedUsers}
 								isUpdating={isUpdating}
+								isSocketConnecting={isSocketConnecting}
 							/>
 						</div>
 					</div>

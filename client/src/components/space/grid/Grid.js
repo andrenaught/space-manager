@@ -35,6 +35,7 @@ const Grid = (props) => {
 		userSettings,
 		totalConnectedUsers,
 		isUpdating,
+		isSocketConnecting,
 	} = props
 	const hasStarted = currStep === 1
 	const [selectedCoords, selectCoords] = useState({ x: -1, y: -1 })
@@ -241,6 +242,7 @@ const Grid = (props) => {
 					gridEditingOn={gridEditingOn}
 					undoGridChanges={undoGridChanges}
 					isUpdating={isUpdating}
+					isSocketConnecting={isSocketConnecting}
 				/>
 			</div>
 			<div style={{ gridArea: 'objectstatus' }}>
@@ -290,6 +292,7 @@ Grid.propTypes = {
 	userSettings: PropTypes.shape({}),
 	totalConnectedUsers: PropTypes.number.isRequired,
 	isUpdating: PropTypes.bool.isRequired,
+	isSocketConnecting: PropTypes.bool.isRequired,
 }
 Grid.defaultProps = {
 	copiedObject: null,
@@ -383,10 +386,19 @@ const MainGrid = (props) => {
 
 const GridStatusBar = (props) => {
 	const { id, saveSpace } = useContext(SpaceContext)
-	const { isSaving, gridEditingOn, undoGridChanges, isUpdating } = props
+	const {
+		isSaving,
+		gridEditingOn,
+		undoGridChanges,
+		isUpdating,
+		isSocketConnecting,
+	} = props
 	let textStatus = 'status bar'
 	let textStatusStyle = { color: '#aaa' }
-	if (isSaving) {
+	if (isSocketConnecting) {
+		textStatus = '...connecting'
+		textStatusStyle = { ...textStatusStyle, color: '#222' }
+	} else if (isSaving) {
 		textStatus = '...saving'
 		textStatusStyle = { ...textStatusStyle, color: '#222' }
 	} else if (isUpdating) {
@@ -440,6 +452,7 @@ GridStatusBar.propTypes = {
 	gridEditingOn: PropTypes.bool.isRequired,
 	undoGridChanges: PropTypes.func.isRequired,
 	isUpdating: PropTypes.bool.isRequired,
+	isSocketConnecting: PropTypes.bool.isRequired,
 }
 
 export default Grid
