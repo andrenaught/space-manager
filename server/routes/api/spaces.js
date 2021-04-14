@@ -20,7 +20,8 @@ router.get('/custom/featured', async (_req, res) => {
 			FROM featured_spaces fs
 			INNER JOIN spaces s ON fs.space_id = s.id
 			INNER JOIN users u ON u.id = s.owner
-			WHERE s.is_public=TRUE`)
+			WHERE s.is_public=TRUE
+			ORDER BY fs.id`)
 
 		return res.json({ spaces: rows })
 	} catch (err) {

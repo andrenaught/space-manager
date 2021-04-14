@@ -37,7 +37,7 @@
 		&.maxed-length {
 			display: block;
 			max-width: 300px;
-			width: 100%;
+			width: calc(100% - 12px);
 			text-overflow: ellipsis;
 			white-space: nowrap;
 			overflow: hidden;
@@ -57,6 +57,12 @@
 			display: none;
 			border: 1px solid #eee;
 			border-radius: 4px;
+			.nav-link{
+				width: 100%;
+				&.maxed-length {
+					width: calc(100% - 12px);
+				}
+			}
 		}
 		padding-top: 10px;
 		top: 45px;
