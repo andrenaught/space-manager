@@ -91,19 +91,23 @@ const Modal = (props) => {
 			<div className={`${sty['ui-modal-filter']}${classList}`} />
 			<div className={`${sty['ui-modal']}${classList}`}>
 				<div className={`${sty['modal-content-container']}`}>
-					<div
-						className={`${sty['modal-content']}`}
-						ref={modalRef}
-						style={{ ...boxStyle }}
-					>
-						<button
-							type="button"
-							className={`${sty['close-btn']}`}
-							onClick={() => closeFunc()}
-						>
-							<IoIosClose className={`${sty.icon}`} />
-						</button>
-						<div className={`${sty['inner-content']}`}>{children}</div>
+					<div className={`${sty['modal-content-container-inner']}`}>
+						<div className={`${sty['modal-outer']}`}>
+							<button
+								type="button"
+								className={`${sty['close-btn']}`}
+								onClick={() => closeFunc()}
+							>
+								<IoIosClose className={`${sty.icon}`} />
+							</button>
+							<div
+								className={`${sty['modal-content']}`}
+								ref={modalRef}
+								style={{ ...boxStyle }}
+							>
+								{children}
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

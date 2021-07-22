@@ -10,21 +10,6 @@
 	width: 100%; /* Full width */
 	height: 100%; /* Full height */
 	overflow: auto; /* Enable scroll if needed */
-
-	&.centered {
-		padding-top: 0px;
-		display: flex;
-		justify-content: center;
-	}
-
-	// "contained" Responsiveness: the modal will stay at a certain height, it will allow to scroll internally if running out of space
-	&.centered.contained {
-		align-items: center;
-		.modal-content {
-			max-height: 500px; // can be overriden
-			overflow: scroll;
-		}
-	}
 }
 
 .ui-modal .modal-content-container {
@@ -34,20 +19,22 @@
 	height: 100%;
 }
 
-.ui-modal .modal-content {
-	max-height: calc(100% - 40px); // give extra space outside modal
-	width: 550px;
-	max-width: calc(100% - 20px);
-	box-shadow: $boxShadow;
-	border-radius: 5px;
-	background: #fff;
+.ui-modal .modal-content-container-inner {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.ui-modal .modal-outer {
+	margin: 0 auto;
+	max-width: 100%;
 	position: relative;
+	padding: 10px;
 
 	.close-btn {
 		background: none;
 		position: absolute;
-		right: 2px;
-		top: 2px;
+		right: 10px;
+		top: 10px;
 		.icon {
 			font-size: 32px;
 			color: #aaa;
@@ -59,12 +46,18 @@
 		}
 	}
 
-	.inner-content {
-		max-height: calc(100% - 40px); // account for padding
+	.modal-content {
+		width: 550px;
+		box-sizing: border-box;
+		max-height: 100%;
+		max-width: 100%;
 		padding: 20px;
 		overflow: scroll;
+		box-shadow: $boxShadow;
+		border-radius: 5px;
+		background: #fff;
 	}
-	.inner-content::-webkit-scrollbar {
+	.modal-content::-webkit-scrollbar {
 		display: none; // hide scrollbar
 	}
 }

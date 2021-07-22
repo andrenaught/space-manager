@@ -6,16 +6,11 @@ import PrivateRoute from 'src/components/utils/PrivateRoute'
 import { ErrorPage } from 'src/components/utils/ErrorPage'
 import NewSpaceRedirect from './redirects/newSpace'
 
-const AllSpaces = () => <div>all spaces</div>
-
 const SpacePage = () => {
 	const { path } = useRouteMatch()
 
 	return (
 		<Switch>
-			<Route exact path="/">
-				<AllSpaces />
-			</Route>
 			<PrivateRoute exact path={`${path}/new`}>
 				<NewSpaceRedirect />
 			</PrivateRoute>

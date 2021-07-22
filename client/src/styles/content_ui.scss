@@ -12,8 +12,11 @@
 	&.screen-centered {
 		margin-top: 15px;
 		margin-bottom: 15px;
-		height: calc(100vh - 120px);
-		max-height: 1000px;
+		min-height: calc(100vh - #{$navHeight + 30px});
+		@media screen and (min-height: 1000px) {
+			min-height: 0;
+			height: 1000px;
+		}
 	}
 }
 
